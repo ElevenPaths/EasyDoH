@@ -1,0 +1,7 @@
+{
+  "name": "com.elevenpaths.easydoh",
+  "description": "Easy DNS over HTTPS agent",
+  "path": "easydoh.exe",
+  "type": "stdio",
+  "allowed_extensions": [ "easydoh@elevenpaths.com" ]
+}
