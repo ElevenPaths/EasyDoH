@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "EasyDoH",
-  "version": "1.0",
- 
+  "version": "1.0.1",
+
   "description": "Easy DNS over HTTPS setting",
   "icons": {
     "48": "icons/easydoh-512.png"
