@@ -1,50 +1,70 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
-<head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="css/bootstrap.min.css" />
-  <link rel="stylesheet" href="css/style.css" />
-</head>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-<body>
-  <img src="img/easydoh.png" alt='elevenpaths' height='42'>
-  <h1>DNS over HTTPS</h1>
-  <div id="popup-content">
-    <div class="select-title">Mode</div>
-    <select id="mode-select" class="custom-select" name="trr-mode">
-      <option value="0">Default (No DoH)</option>
-      <option value="1" selected>Fastest: DoH or Regular DNS</option>
-      <option value="2">DoH and DNS if it fails</option>
-      <option value="3">DoH only</option>
-      <option value="4">DoH testing</option>
-    </select>
-    <br>
-    <div class="select-title">Server</div>
-    <select id="list-select" class="custom-select" name="dns-servers">
-      <option value="cloudflare" selected>Cloudflare</option>
-      <option value="google-rfc">Google RFC 8484</option>
-      <option value="google-json">Google JSON API</option>
-      <option value="secure-dns">Secure DNS EU</option>
-      <option value="quad9">Quad 9</option>
-    </select>
-    </br>
-    <button id="change-content" type="button" class="btn btn-outline-primary">Apply</button>
-  </div>
-  <div id="error-content" class="hidden error-content">
-    <p>Addon not detected.</p>
-    <p>Check if it is in the right path or download and install it from <a href="https://easydoh.e-paths.com/download.html">here</a>.</p>
-  </div>
-  <div id="reboot" class="hidden reboot">
-    <p>Restart the browser to apply changes<br>EasyDoH will show Cloudfare configuration by default,<br>but your configuration wil be shown in TRR about:config</p>
-  </div>
-  <div class="footer-11p">
-    Powered by <a href="https://elevenpaths.com" target="_blank"><img src="img/elevenpaths.png" alt='elevenpaths' height='18'></a>; 2019
-  </div>
-  <script src="js/script.js"></script>
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <script src="js/bootstrap.bundle.min.js"></script>
-</body>
-
+  <body class="p-2 text-center">
+    <img src="img/easydoh.png" alt="elevenpaths" height="42" />
+    <h1 class="mt-2">DNS over HTTPS</h1>
+    <div id="popup-content">
+      <form class="text-center my-2">
+        <div class="form-group">
+          <label for="modeInput">Mode</label>
+          <select id="modeInput" class="custom-select" name="trr-mode">
+            <option value="0">Default (No DoH)</option>
+            <option value="1" selected>Fastest: DoH or Regular DNS</option>
+            <option value="2">DoH and DNS if it fails</option>
+            <option value="3">DoH only</option>
+            <option value="4">DoH testing</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="serverInput">Server</label>
+          <select id="serverInput" class="custom-select" name="dns-servers">
+          </select>
+          <input
+            id="serverManualInput"
+            class="form-control my-2 d-none"
+            placeholder="DNS here..."
+          />
+        </div>
+        <div class="pb-2">
+          <button
+            id="change-content"
+            type="button"
+            class="btn btn-outline-primary"
+          >
+            Apply
+          </button>
+          <button id="reset" type="button" class="btn btn-outline-primary">
+            Reset
+          </button>
+        </div>
+      </form>
+    </div>
+    <div id="messages" class="d-none"></div>
+    <div class="mt-2">
+      Powered by
+      <a href="https://elevenpaths.com" target="_blank"
+        ><img
+          class="mb-2"
+          src="img/elevenpaths.png"
+          alt="elevenpaths"
+          height="18"/></a
+      >; 2019
+    </div>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/validator.min.js"></script>
+    <script src="js/script.js"></script>
+  </body>
 </html>

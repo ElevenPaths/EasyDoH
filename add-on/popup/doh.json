@@ -1,0 +1,26 @@
+{
+  "default": {
+    "name": "Default",
+    "url": "https://mozilla.cloudflare-dns.com/dns-query"
+  },
+  "cloudflare": {
+    "name": "Cloudflare",
+    "url": "https://cloudflare-dns.com/dns-query"
+  },
+  "google-rfc": {
+    "name": "Google RFC 8484",
+    "url": "https://dns.google/dns-query"
+  },
+  "google-json": {
+    "name": "Google JSON API",
+    "url": "https://dns.google/resolve"
+  },
+  "secure-dns": {
+    "name": "Secure DNS EU",
+    "url": "https://doh.securedns.eu/dns-query"
+  },
+  "quad9": {
+    "name": "Quad 9",
+    "url": "https://dns.quad9.net/dns-query"
+  }
+}
