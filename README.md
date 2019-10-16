@@ -3,7 +3,7 @@
 
 # EasyDoH
 
-EasyDoH is a simple addon for Firefox that allows to easily activate [DNS over HTTPS](https://en.wikipedia.org/wiki/DNS_over_HTTPS) and its mode with one click.
+EasyDoH is a simple addon for Firefox that allows to easily activate [DNS over HTTPS](https://en.wikipedia.org/wiki/DNS_over_HTTPS) and its working mode with just one click.
 
 It contains explanations for the different modes allowed (only available in _about:config_) and DoH servers to choose from.
 

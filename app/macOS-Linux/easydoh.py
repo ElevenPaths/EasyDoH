@@ -9,6 +9,8 @@ import struct
 import subprocess
 import sys
 
+VERSION = "1.1.0"
+
 # Templates for configuration parameters
 trr_mode = 'network.trr.mode'
 trr_uri = 'network.trr.uri'
@@ -155,7 +157,10 @@ def write_firefox_user_pref(mode, uri):
 while True:
     received_message = get_message()
     data = json.loads(received_message)
-    if data["mode"] == "init":
+    if data["mode"] == "version":
+        values = {"mode": "version", "uri": VERSION}
+        send_message(encode_message(values))
+    elif data["mode"] == "init":
         mode, uri = get_firefox_dns_pref()
         values = {"mode": mode, "uri": uri}
         send_message(encode_message(values))

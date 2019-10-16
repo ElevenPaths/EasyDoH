@@ -1,13 +1,13 @@
-$(function() {
-  var data = { mode: "init", uri: "" };
-  port.postMessage(JSON.stringify(data));
-
-  loadJSON();
-});
-
 var port = browser.extension
   .getBackgroundPage()
   .browser.runtime.connectNative("com.elevenpaths.easydoh");
+
+$(function() {
+  var version = { mode: "version", uri: "" };
+  port.postMessage(JSON.stringify(version));
+
+  loadJSON("doh.json", 1, "default");
+});
 
 var dnsValues = "";
 
@@ -35,7 +35,7 @@ document.getElementById("serverInput").onclick = function() {
   var server = document.getElementById("serverInput");
   var serverSelect = server.options[server.selectedIndex].value;
 
-  if (serverSelect === "manual") {
+  if (serverSelect == "manual") {
     document.getElementById("serverManualInput").classList.remove("d-none");
     document.getElementById("change-content").setAttribute("disabled", true);
   } else {
@@ -55,17 +55,35 @@ Listen for messages from the app.
 */
 port.onMessage.addListener(response => {
   console.log("Received: " + response);
-  mode = response["mode"];
-  uri = getDnsFromUri(response["uri"]);
 
-  loadJSON(mode, uri);
+  mode = response["mode"];
+  uri = response["uri"];
+
+  if (mode == "version") {
+    var version = browser.runtime.getManifest().version;
+    if (version != uri) {
+      message =
+        '<p>Addon version incorrect.</br>Please, download and install new version from <a href="https://easydoh.e-paths.com/download.html">here</a>.</p>';
+      setMessage(message);
+    } else {
+      var data = { mode: "init", uri: "" };
+      port.postMessage(JSON.stringify(data));
+    }
+  } else {
+    uri = getDnsFromUri(uri);
+
+    var dohRepo =
+      "https://raw.githubusercontent.com/ElevenPaths/EasyDoH/master/add-on/popup/doh.json";
+    loadJSON("doh.json", mode, uri);
+    loadJSON(dohRepo, mode, uri);
+  }
 });
 
 port.onDisconnect.addListener(response => {
   console.log("Disconnect: " + response);
 
   message =
-    '<p>Addon not detected.</p><p>Check if it is in the right path or download and install it from <a href="https://easydoh.e-paths.com/download.html">here</a>.</p>';
+    '<p>Addon not detected.</br>Check if it is in the right path or download and install it from <a href="https://easydoh.e-paths.com/download.html">here</a>.</p>';
   setMessage(message);
 });
 
@@ -75,7 +93,7 @@ function buttonAction() {
   var uri = document.getElementById("serverInput");
   var valueUri = uri.options[uri.selectedIndex].value;
 
-  if (valueUri === "manual") {
+  if (valueUri == "manual") {
     valueUri = "manual;" + document.getElementById("serverManualInput").value;
   } else {
     valueUri = dnsValues[valueUri].url;
@@ -107,7 +125,7 @@ function sendData(mode, uri) {
   port.postMessage(JSON.stringify(data));
 
   message =
-    "<p>Restart the browser to apply changes<br/>EasyDoH will show Cloudfare configuration by default,<br/>but your configuration wil be shown in TRR <i>about:config</i></p>";
+    "<p>Restart the browser to apply changes.<br/>Your configuration will be shown in TRR <i>about:config</i>.</p>";
   setMessage(message);
 }
 
@@ -123,7 +141,7 @@ function setOptionsValue(mode, uri) {
   document.getElementById("modeInput").options.selectedIndex = mode;
   var serverInput = document.getElementById("serverInput").options;
 
-  if (uri === "default") {
+  if (uri == "default") {
     uri = "cloudflare";
   } else if (uri.includes("manual;")) {
     var manual = uri.split(";");
@@ -141,7 +159,7 @@ function setOptionsValue(mode, uri) {
   }
 }
 
-function loadJSON(mode, uri) {
+function loadJSON(cdn, mode, uri) {
   xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -159,6 +177,6 @@ function loadJSON(mode, uri) {
       setOptionsValue(mode, uri);
     }
   };
-  xmlhttp.open("GET", "doh.json", true);
+  xmlhttp.open("GET", cdn, true);
   xmlhttp.send();
 }
