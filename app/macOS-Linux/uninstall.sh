@@ -24,3 +24,6 @@ rm "$TARGET_DIR/com.elevenpaths.easydoh.json"
 echo "Native messaging host $HOST_NAME has been uninstalled."
 # Remove backup file
 rm "$TARGET_DIR/com.elevenpaths.easydoh.json-e"
+
+DIR="`dirname \"$0\"`"
+python $DIR/easydoh.py uninstall

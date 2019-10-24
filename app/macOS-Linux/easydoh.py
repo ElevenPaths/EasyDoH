@@ -116,6 +116,9 @@ def get_firefox_dns_pref():
             get_uri = re.search('user_pref\("{}", "?(.+?)"?\);'.format(trr_uri), read)
             if get_uri:
                 get_uri = get_uri.group(1)
+    else:
+        get_mode = "1"
+        get_uri = "https://mozilla.cloudflare-dns.com/dns-query"
 
     return get_mode, get_uri
 
@@ -132,6 +135,22 @@ def add_data_file(file, pref, value):
         file += '\n' + value
 
     return file
+
+def format_file(file):
+    if os.path.isfile(file):
+        format_file = ""
+
+        with open(file, 'r+') as f:
+            for line in f:
+                if line != "\n":
+                    format_file += line
+
+            f.seek(0)
+            f.truncate(0)
+            f.write(format_file)
+            
+        if format_file == "":
+            os.remove(file)
 
 def write_firefox_user_pref(mode, uri):
     if uri.find("manual;") == 0:
@@ -153,6 +172,34 @@ def write_firefox_user_pref(mode, uri):
         f.seek(0)
         f.truncate(0)
         f.write(read)
+
+    format_file(user)
+
+def uninstall():
+    user = get_firefox_user_file()
+
+    if os.path.isfile(user):
+        with open(user, 'r+') as f:
+            uninstall_file = ""
+
+            for line in f:
+                if trr_mode not in line and trr_uri not in line and trr_custom_uri not in line:
+                    uninstall_file += line
+
+            f.seek(0)
+            f.truncate(0)
+            f.write(uninstall_file)
+
+    format_file(user)
+
+try:
+    if sys.argv[1] == 'uninstall':
+        uninstall()
+        print('\n')
+        print('Uninstalled!')
+        sys.exit(0)
+except Exception as e:
+    pass
 
 while True:
     received_message = get_message()
