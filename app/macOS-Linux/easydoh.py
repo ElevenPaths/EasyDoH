@@ -9,7 +9,7 @@ import struct
 import subprocess
 import sys
 
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 
 # Templates for configuration parameters
 trr_mode = 'network.trr.mode'
@@ -102,23 +102,20 @@ def set_firefox_user_pref(key, value):
 
 def get_firefox_dns_pref():
     user_file = get_firefox_user_file()
-    get_mode = ''
-    get_uri = ''
+    get_mode = '1'
+    get_uri = 'https://mozilla.cloudflare-dns.com/dns-query'
 
     if os.path.isfile(user_file):
         with open(user_file, 'r') as f:
             read = f.read()
 
-            get_mode = re.search('user_pref\("{}", ?(.+?)\);'.format(trr_mode), read)
-            if get_mode:
-                get_mode = get_mode.group(1)
+            get_mode_search = re.search('user_pref\("{}", ?(.+?)\);'.format(trr_mode), read)
+            if get_mode_search:
+                get_mode = get_mode_search.group(1)
 
-            get_uri = re.search('user_pref\("{}", "?(.+?)"?\);'.format(trr_uri), read)
-            if get_uri:
-                get_uri = get_uri.group(1)
-    else:
-        get_mode = "1"
-        get_uri = "https://mozilla.cloudflare-dns.com/dns-query"
+            get_uri_serach = re.search('user_pref\("{}", "?(.+?)"?\);'.format(trr_uri), read)
+            if get_uri_serach:
+                get_uri = get_uri_search.group(1)
 
     return get_mode, get_uri
 
