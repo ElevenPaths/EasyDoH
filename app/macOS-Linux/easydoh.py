@@ -9,7 +9,7 @@ import struct
 import subprocess
 import sys
 
-VERSION = "1.1.1"
+VERSION = "1.1.2"
 
 # Templates for configuration parameters
 trr_mode = 'network.trr.mode'
@@ -55,7 +55,10 @@ def send_message(encoded_message):
 
  # Simple debug function to trace execution in Firefox developer console
 def log(message):
-    sys.stderr.write(message)
+    if sys.version_info.major == 3:
+        sys.stdout.buffer.write(message)
+    else:
+        sys.stderr.write(message)
 
 def get_firefox_profile_dir():
     FF_PRF_DIR_DEFAULT = None
