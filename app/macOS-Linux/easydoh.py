@@ -113,8 +113,8 @@ def get_firefox_dns_pref():
             if get_mode_search:
                 get_mode = get_mode_search.group(1)
 
-            get_uri_serach = re.search('user_pref\("{}", "?(.+?)"?\);'.format(trr_uri), read)
-            if get_uri_serach:
+            get_uri_search = re.search('user_pref\("{}", "?(.+?)"?\);'.format(trr_uri), read)
+            if get_uri_search:
                 get_uri = get_uri_search.group(1)
 
     return get_mode, get_uri
