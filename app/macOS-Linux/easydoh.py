@@ -8,8 +8,9 @@ import re
 import struct
 import subprocess
 import sys
+import ConfigParser
 
-VERSION = "1.1.2"
+VERSION = "1.1.3"
 
 # Templates for configuration parameters
 trr_mode = 'network.trr.mode'
@@ -61,34 +62,29 @@ def log(message):
         sys.stderr.write(message)
 
 def get_firefox_profile_dir():
-    FF_PRF_DIR_DEFAULT = None
+    default_profile_path = None
     _platform = sys.platform
+    mozilla_profile = None
     
     if _platform == 'win32' or _platform == 'win64':
-        try:
-            # TODO: Check this case!
-            # FF_PRF_DIR_DEFAULT = glob.glob("{}\\Mozilla\\Firefox\\Profiles\\*default-release*".format(os.getenv('APPDATA')))[0]
-            FF_PRF_DIR_DEFAULT = glob.glob("{}\\Mozilla\\Firefox\\Profiles\\*default*".format(os.getenv('APPDATA')))[0]
-        except:
-            log("[!] Error getting Firefox default profile path")
-            sys.exit()
-
+        mozilla_profile = os.path.join(os.getenv('APPDATA'), 'Mozilla\\Firefox')
     elif _platform == 'darwin':
-        try:
-            FF_PRF_DIR_DEFAULT = glob.glob(os.path.expanduser("~/Library/Application Support/Firefox/Profiles/*default*"))[0]
-        except:
-            log("[!] Error getting Firefox default profile path")
-            sys.exit()
-
+        mozilla_profile = os.path.expanduser('~/Library/Application Support/Firefox')
     elif _platform == 'linux' or _platform == 'linux2':
-        try:
-            FF_PRF_DIR_DEFAULT = glob.glob(os.path.expanduser("~/.mozilla/firefox/*default*"))[0]
-        except:
+        mozilla_profile = os.path.expanduser('~/.mozilla/firefox')
+    
+    if mozilla_profile:
+        mozilla_profile_ini = os.path.join(mozilla_profile, 'profiles.ini')
+        profile = ConfigParser.ConfigParser()
+        profile.read(mozilla_profile_ini)
+        try:          
+            default_profile_path = os.path.normpath(os.path.join(mozilla_profile, profile.get('Profile0', 'Path')))
+        except Exception as e:
+            log(e)
             log("[!] Error getting Firefox default profile path")
-            sys.exit()
+            sys.exit(1)
 
-    log("[i] Writing to file {}/user.js".format(FF_PRF_DIR_DEFAULT))
-    return FF_PRF_DIR_DEFAULT
+    return default_profile_path
 
 def get_firefox_user_file():
     user_file = "user.js"
