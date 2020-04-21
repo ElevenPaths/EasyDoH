@@ -22,5 +22,9 @@
   "quad9": {
     "name": "Quad 9",
     "url": "https://dns.quad9.net/dns-query"
+  },
+  "elevenpaths": {
+    "name": "ElevenPaths",
+    "url": "https://doh-beta.e-paths.com"
   }
 }
