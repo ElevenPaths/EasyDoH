@@ -19,7 +19,7 @@ Run [install.bat](app/Windows/install.bat) script in the desired directory. This
 
 and set its default value to:
 
-    com.google.chrome.example.echo-win.json
+    com.elevenpaths.easydoh-win.json
 
 If you want to install the native messaging host for all users, change **HKCU** to **HKLM**.
 
